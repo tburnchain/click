@@ -7,7 +7,7 @@ LUXEVIA product-feed 스키마(정규화 계약)로 변환해 이 모듈에 넘�
   2) RawOffer 로 매핑(브랜드·스타일코드·GTIN 등 식별자 보존)
   3) 기존 파이프라인(정규화→UPSERT)으로 '지금 수집된 광고상품'에 리스팅
 
-LUXEVIA의 크롤링 기술 중 '정규화·식별·가격검증' 부분을 GAMDAP(Python/PostgreSQL)로 이식한 것.
+LUXEVIA의 크롤링 기술 중 '정규화·식별·가격검증' 부분을 TBURN.CLICK(Python/PostgreSQL)로 이식한 것.
 """
 
 from __future__ import annotations

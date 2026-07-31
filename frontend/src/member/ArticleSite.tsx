@@ -73,7 +73,7 @@ export function ArticleSite({ slug, data }: { slug: string; data: PublicSiteData
 
       <footer className="art-foot">
         {data.affiliate_applied && <span>※ 본 콘텐츠는 제휴 활동으로 일정 수수료를 받을 수 있습니다. </span>}
-        © {data.title} · Powered by GAMDAP
+        © {data.title} · Powered by TBURN.CLICK
       </footer>
     </div>
   );

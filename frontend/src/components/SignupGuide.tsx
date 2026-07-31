@@ -133,7 +133,7 @@ export function SignupGuide({ onClose }: { onClose: () => void }) {
           </div>
 
           <p className="guide-foot muted">
-            ※ 로그인 비밀번호는 GAMDAP에 저장되지 않습니다 — 비밀번호 관리자에 보관하고, 발급받은 <b>트래킹 코드만</b> 대시보드 ①에서 연결하세요.
+            ※ 로그인 비밀번호는 TBURN.CLICK에 저장되지 않습니다 — 비밀번호 관리자에 보관하고, 발급받은 <b>트래킹 코드만</b> 대시보드 ①에서 연결하세요.
             수수료율·정책은 수시로 변경되니 가입 전 각 네트워크 최신 약관을 확인하세요.
           </p>
         </div>

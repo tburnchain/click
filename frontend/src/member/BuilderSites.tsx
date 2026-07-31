@@ -24,7 +24,7 @@ const SEG_LABEL: Record<string, string> = {
   goldmine: "강력추천", rising: "인기상승", cashcow: "스테디셀러", saturated: "인기", avoid: "",
 };
 
-// 로그인/가입 → GAMDAP(회원 추천코드 주입 → 가입 커미션)
+// 로그인/가입 → TBURN.CLICK(회원 추천코드 주입 → 가입 커미션)
 function JoinBar({ ownerRef, theme }: { ownerRef: string | null; theme?: string }) {
   const rp = ownerRef ? `&ref=${ownerRef}` : "";
   return (
@@ -43,7 +43,7 @@ function Foot({ data }: { data: PublicSiteData }) {
       <b>{data.title}</b>{owner["상호"] ? ` · ${owner["상호"]}` : ""}
       {owner["소개"] && <div className="muted">{owner["소개"]}</div>}
       {data.affiliate_applied && <div className="nb-ftc">※ 일부 링크는 제휴 활동으로 수수료를 받을 수 있습니다.</div>}
-      <div className="muted" style={{ fontSize: 12 }}>Powered by GAMDAP</div>
+      <div className="muted" style={{ fontSize: 12 }}>Powered by TBURN.CLICK</div>
     </footer>
   );
 }

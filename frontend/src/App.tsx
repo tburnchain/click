@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "./api";
+import { Symbol } from "./Logo";
 import type { Category, Facet, Filters, Network, Offer, Opportunity, Summary } from "./types";
 import { KpiStrip } from "./components/KpiStrip";
 import { FilterBar } from "./components/FilterBar";
@@ -63,8 +64,8 @@ export function App() {
   return (
     <div className="app">
       <div className="header">
-        <div className="logo">◆</div>
-        <h1>GAMDAP</h1>
+        <Symbol size={30} />
+        <h1>TBURN<span className="brand-dot">.CLICK</span></h1>
         <span className="sub">글로벌 제휴마케팅 데이터 대시보드 · 어떤 상품을 밀지 10초 안에 결정</span>
         <button className="guide-btn" onClick={() => setGuideOpen(true)} title="제휴 네트워크 가입 가이드">
           <span className="guide-btn-ico">📋</span> 가입 가이드

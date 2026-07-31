@@ -52,7 +52,7 @@ export function PublicSite({ slug, preloaded }: { slug: string; preloaded?: Publ
 
       <footer className="pub-foot">
         {data.affiliate_applied && <span className="pub-disc">※ 본 페이지의 링크는 제휴 활동으로 수수료를 받을 수 있습니다.</span>}
-        <span className="muted"> · Powered by GAMDAP</span>
+        <span className="muted"> · Powered by TBURN.CLICK</span>
       </footer>
     </div>
   );

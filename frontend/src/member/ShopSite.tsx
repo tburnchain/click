@@ -153,7 +153,7 @@ export function ShopHome({ slug, data, variant }: { slug: string; data: PublicSi
           <div><b>{data.title}</b>{owner["상호"] ? ` · ${owner["상호"]}` : ""}</div>
           {owner["소개"] && <div className="muted">{owner["소개"]}</div>}
           {data.affiliate_applied && <div className="muted" style={{ fontSize: 12, marginTop: 8 }}>※ 일부 상품 링크는 제휴 활동으로 수수료를 받을 수 있습니다.</div>}
-          <div className="muted" style={{ fontSize: 12 }}>Powered by GAMDAP</div>
+          <div className="muted" style={{ fontSize: 12 }}>Powered by TBURN.CLICK</div>
         </div>
       </footer>
     </div>
@@ -237,7 +237,7 @@ export function ShopDetail({ slug, productId }: { slug: string; productId: numbe
           </div>
         </div>
       )}
-      <footer className="shop-foot"><div className="shop-foot-in"><b>{store}</b><div className="muted" style={{ fontSize: 12 }}>※ 제휴 활동으로 수수료를 받을 수 있습니다 · Powered by GAMDAP</div></div></footer>
+      <footer className="shop-foot"><div className="shop-foot-in"><b>{store}</b><div className="muted" style={{ fontSize: 12 }}>※ 제휴 활동으로 수수료를 받을 수 있습니다 · Powered by TBURN.CLICK</div></div></footer>
     </div>
   );
 }

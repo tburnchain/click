@@ -273,7 +273,7 @@ def build_site_html(data: dict, *, base_url: str = _DEF_BASE, slug: str | None =
 </main>
 <footer class="site"><div class="wrap">
   <strong>{e(data['title'])}</strong>{f' · {e(biz)}' if biz != data['title'] else ''}
-  <div class="ftc">※ 일부 링크는 제휴 활동으로 수수료를 받을 수 있습니다. · Powered by GAMDAP</div>
+  <div class="ftc">※ 일부 링크는 제휴 활동으로 수수료를 받을 수 있습니다. · Powered by TBURN.CLICK</div>
 </div></footer>
 {ad_bottom_html}
 {gads_body}
@@ -431,7 +431,7 @@ def build_product_html(p: dict, data: dict, *, base_url: str = _DEF_BASE, slug: 
   {f'<section class="rel"><h2>함께 보면 좋은 상품</h2><div class="grid">{rel_cards}</div></section>' if rel_cards else ''}
 </div>
 <footer class="site"><div class="wrap"><strong>{e(data['title'])}</strong>
-  <div class="ftc">Powered by GAMDAP</div></div></footer>
+  <div class="ftc">Powered by TBURN.CLICK</div></div></footer>
 {gads_body}
 </body>
 </html>"""
@@ -488,7 +488,7 @@ def build_readme(data: dict, slug: str, site_url: str) -> str:
 - 리치 결과 테스트: https://search.google.com/test/rich-results 로 JSON-LD 검증
 - 구매 링크에는 회원 제휴코드가 이미 주입되어 있습니다(`rel="sponsored"`).
 
-Powered by GAMDAP
+Powered by TBURN.CLICK
 """
 
 

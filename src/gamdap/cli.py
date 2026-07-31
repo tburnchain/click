@@ -1,4 +1,4 @@
-"""GAMDAP CLI.
+"""TBURN.CLICK CLI.
 
 사용:
     python -m gamdap.cli migrate

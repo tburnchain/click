@@ -178,7 +178,7 @@ export function GoogleAdsSite({ data }: { slug: string; data: PublicSiteData }) 
       <footer className="gad-foot">
         <b>{data.title}</b>
         {data.affiliate_applied && <div className="gad-ftc">※ 일부 링크는 제휴 활동으로 수수료를 받을 수 있습니다.</div>}
-        <div className="gad-ftc">Powered by GAMDAP · Google Ads·AdSense 최적화</div>
+        <div className="gad-ftc">Powered by TBURN.CLICK · Google Ads·AdSense 최적화</div>
       </footer>
 
       {/* 하단 고정 광고(앵커) */}

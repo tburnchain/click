@@ -22,7 +22,7 @@ _FRONTEND_DIST = Path(__file__).resolve().parents[3] / "frontend" / "dist"
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="GAMDAP API",
+        title="TBURN.CLICK API",
         version=__version__,
         description="글로벌 제휴마케팅 데이터 통합 플랫폼 — 오퍼·랭킹·비교·분석",
     )

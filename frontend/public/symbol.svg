@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="TBURN.CLICK">
+  <defs>
+    <linearGradient id="tbBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="tbFlame" x1="0.5" y1="1" x2="0.5" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 배지 -->
+  <rect width="64" height="64" rx="15" fill="url(#tbBg)"/>
+
+  <!-- 클릭(.click) 커서 — 흰색, 굵고 단순해 16px 에서도 형태 유지 -->
+  <path d="M18 11 L18 46.2 L26.8 37.4 L33.4 52.8 L37.8 50.6 L31.2 35.2 L42.2 35.2 Z"
+        fill="#ffffff"/>
+
+  <!-- 불꽃(BURN) 스파크 — 커서 우상단에서 튀는 형태 -->
+  <path d="M46.5 12.5 C49.6 15.1 51 17.9 50.2 20.8 C49.6 23 47.9 24.4 45.4 24.7
+           C47.2 22.3 46.9 20.2 44.6 18.3 C44.9 20.6 44.1 22 42.2 22.6
+           C41.3 20 41.8 17.6 43.6 15.4 C44.6 14.2 45.6 13.2 46.5 12.5 Z"
+        fill="url(#tbFlame)"/>
+  <circle cx="52.5" cy="29.5" r="2.2" fill="#fbbf24"/>
+  <circle cx="47.2" cy="33.4" r="1.4" fill="#fbbf24" opacity="0.8"/>
+</svg>

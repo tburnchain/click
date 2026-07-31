@@ -67,7 +67,7 @@ export function SearchSite({ slug, data }: { slug: string; data: PublicSiteData 
       </div>
       <footer className="srch-foot">
         {owner["소개"] && <span>{owner["소개"]} · </span>}
-        {data.affiliate_applied && <span>제휴 활동으로 수수료를 받을 수 있습니다 · </span>}Powered by GAMDAP
+        {data.affiliate_applied && <span>제휴 활동으로 수수료를 받을 수 있습니다 · </span>}Powered by TBURN.CLICK
       </footer>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AuthModal } from "./AuthModal";
+import { Logo } from "../Logo";
 import { LandingProducts } from "./LandingProducts";
 import { BuilderShowcase } from "./BuilderShowcase";
 
@@ -35,7 +36,7 @@ export function Landing({ onAuthed }: { onAuthed: () => void }) {
   return (
     <div className="landing">
       <nav className="lnav">
-        <div className="lnav-logo">◆ GAMDAP</div>
+        <div className="lnav-logo"><Logo size={28} /></div>
         <button className="lnav-login" onClick={() => open("login")}>로그인 / 가입</button>
       </nav>
 
@@ -69,7 +70,7 @@ export function Landing({ onAuthed }: { onAuthed: () => void }) {
 
       <LandingProducts onRequireLogin={() => open("signup")} />
 
-      <footer className="lfoot">GAMDAP · 글로벌 제휴마케팅 링크 포탈 빌더</footer>
+      <footer className="lfoot">TBURN.CLICK · 글로벌 제휴마케팅 링크 포탈 빌더</footer>
 
       {auth && <AuthModal initialMode={auth.mode} refCode={refCode} onClose={() => setAuth(null)} onAuthed={onAuthed} />}
     </div>
