@@ -314,10 +314,12 @@ async def receive_postback(network_code: str, request: Request) -> dict:
             if isinstance(body, dict):
                 raw.update({str(k): v for k, v in body.items()})
         except (ValueError, TypeError):
+            # JSON 이 아니면 폼으로 시도. python-multipart 부재 시 starlette 은
+            # AssertionError 를 던지므로 Exception 으로 받는다(수신은 절대 죽으면 안 됨).
             try:
                 form = await request.form()
                 raw.update({str(k): str(v) for k, v in form.items()})
-            except (ValueError, TypeError):
+            except Exception:  # noqa: BLE001 — 어떤 파싱 실패든 쿼리스트링으로 진행
                 pass
     client_ip = request.client.host if request.client else None
     # 프록시(Cloudflare/nginx) 뒤에서는 원 발신 IP 가 헤더에 있다

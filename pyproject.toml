@@ -18,6 +18,7 @@ dependencies = [
     "python-dateutil>=2.9",
     "zstandard>=0.22",
     "cryptography>=42.0",   # members.security Fernet(자격증명 암호화)
+    "python-multipart>=0.0.9",  # 포스트백 폼 파싱(네트워크가 form-encoded 로 보냄)
 ]
 
 [project.optional-dependencies]

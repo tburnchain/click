@@ -137,3 +137,51 @@ def test_generated_keys_are_unique():
 
 def test_scope_constants_cover_growth_operations():
     assert {"growth:read", "growth:write", "growth:settle", "admin"} == set(auth.SCOPES)
+
+
+# ── 포스트백 엔드포인트 견고성 ──
+def test_postback_endpoint_never_500s(monkeypatch):
+    """수신 엔드포인트는 어떤 입력에도 500 을 내면 안 된다.
+
+    네트워크는 500 을 받으면 재시도 폭주를 일으키고, 최악의 경우 우리를
+    '장애'로 판정해 콜백을 영구 중단한다. 거부는 200 + outcome 으로 알린다.
+
+    실제 회귀 사례: python-multipart 부재 시 starlette 이 AssertionError 를
+    던져 500 이 났다. ValueError/TypeError 만 잡던 코드가 원인이었다.
+    """
+    from fastapi.testclient import TestClient
+
+    from gamdap.api.routers import growth as gr
+
+    # DB 를 타지 않도록 수신 처리를 대체 — 여기서 검증할 것은 '요청 파싱'이다.
+    monkeypatch.setattr(gr.ic, "handle_postback",
+                        lambda *a, **k: pb.PostbackResult("unknown_network",
+                                                          detail="테스트 스텁"))
+    monkeypatch.setattr(gr, "transaction", lambda: _NullTx())
+
+    client = TestClient(gr.router and _app_with(gr))
+    cases = [
+        ("GET",  "/api/v1/growth/postback/x?subid=a", None),
+        ("POST", "/api/v1/growth/postback/x", b"not-json-at-all"),
+        ("POST", "/api/v1/growth/postback/x?a=1", b""),
+        ("POST", "/api/v1/growth/postback/x", b"a=1&b=2"),
+    ]
+    for method, path, body in cases:
+        r = client.request(method, path, content=body)
+        assert r.status_code == 200, f"{method} {path} → {r.status_code}"
+        assert r.json()["ok"] is False
+
+
+class _NullTx:
+    def __enter__(self):
+        return None
+
+    def __exit__(self, *exc):
+        return False
+
+
+def _app_with(growth_module):
+    from fastapi import FastAPI
+    app = FastAPI()
+    app.include_router(growth_module.router)
+    return app

@@ -27,10 +27,14 @@ def create_app() -> FastAPI:
         version=__version__,
         description="글로벌 제휴마케팅 데이터 통합 플랫폼 — 오퍼·랭킹·비교·분석",
     )
+    # 회원이 내보낸 사이트는 다른 도메인에서 동작하므로 클릭 추적(POST)이
+    # 교차출처로 온다. GET 만 허용하면 추적이 전부 실패한다.
+    # 인증이 필요한 관리 경로는 API 키 헤더로 보호되므로 CORS 완화의 위험은 없다
+    # (자격증명 쿠키를 쓰지 않으며 allow_credentials 도 켜지 않는다).
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # 프로덕션은 도메인 화이트리스트로 제한
-        allow_methods=["GET"],
+        allow_origins=["*"],
+        allow_methods=["GET", "POST", "OPTIONS"],
         allow_headers=["*"],
     )
 
