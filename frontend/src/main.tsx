@@ -5,23 +5,32 @@ import { Landing } from "./member/Landing";
 import { MemberDashboard } from "./member/MemberDashboard";
 import { SitePage } from "./member/SitePage";
 import { getToken, memberApi } from "./auth";
+import { PartnerDashboard } from "./partner/PartnerDashboard";
+import { PartnerLogin } from "./partner/PartnerLogin";
+import { getPartnerToken } from "./partner/api";
 import "./styles.css";
 
 function Root() {
   const path = window.location.pathname;
   const isSite = path.startsWith("/site/");
   const isExplore = path.startsWith("/explore");
+  const isPartner = path.startsWith("/partner");
   const [authed, setAuthed] = useState<boolean | null>(null);
 
   // 훅은 조건 없이 최상단에서 호출(React 규칙)
   useEffect(() => {
-    if (isSite || isExplore) return;
+    if (isSite || isExplore || isPartner) return;
     if (!getToken()) { setAuthed(false); return; }
     memberApi.me().then(() => setAuthed(true)).catch(() => setAuthed(false));
-  }, [isSite, isExplore]);
+  }, [isSite, isExplore, isPartner]);
 
   if (isSite) return <SitePage path={path} />;
   if (isExplore) return <App />;
+  if (isPartner) {
+    return getPartnerToken()
+      ? <PartnerDashboard onLogout={() => window.location.reload()} />
+      : <PartnerLogin onAuthed={() => window.location.reload()} />;
+  }
   if (authed === null) return <div className="pub-empty">불러오는 중…</div>;
   return authed
     ? <MemberDashboard onLogout={() => window.location.reload()} />

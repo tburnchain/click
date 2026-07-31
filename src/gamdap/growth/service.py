@@ -88,15 +88,47 @@ def record_touchpoint(conn: Connection, *, visitor_id: str, partner_id: int | No
                       network_id: int | None = None, channel: str = "direct",
                       device: str | None = None, country: str | None = None,
                       ip: str | None = None, user_agent: str | None = None,
-                      session_id: str | None = None, is_bot: bool = False) -> int:
-    """클릭 1건을 불변 이벤트로 적재. IP/UA 는 해시만 저장한다."""
+                      session_id: str | None = None, is_bot: bool = False,
+                      click_token: str | None = None) -> int:
+    """클릭 1건을 불변 이벤트로 적재. IP/UA 는 해시만 저장한다.
+
+    click_token 은 나가는 제휴 딥링크에 subid 로 심어지고, 네트워크가 전환 보고 시
+    되돌려준다 → 확정 귀속의 근거가 된다. 미지정 시 자동 발급한다.
+    """
+    from gamdap.growth.postback import new_click_token
+    token = click_token or new_click_token()
     row = conn.execute(
         "INSERT INTO core.touchpoints (visitor_id, session_id, partner_id, site_id, offer_id, "
-        "network_id, channel, device, country, ip_hash, ua_hash, is_bot) "
-        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
+        "network_id, channel, device, country, ip_hash, ua_hash, is_bot, click_token) "
+        "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
         (visitor_id, session_id, partner_id, site_id, offer_id, network_id, channel,
-         device, (country or "")[:2] or None, _hash(ip), _hash(user_agent), is_bot)).fetchone()
+         device, (country or "")[:2] or None, _hash(ip), _hash(user_agent), is_bot,
+         token)).fetchone()
     return row["id"]
+
+
+def tracked_link(conn: Connection, *, landing_url: str, network_id: int | None,
+                 click_token: str, member_tracking: dict | None = None) -> str:
+    """딥링크에 회원 제휴코드 + 우리 클릭토큰을 함께 주입한다.
+
+    회원 코드는 '수익이 누구 계좌로 가는가', 클릭토큰은 '어느 파트너 실적인가'를
+    결정한다. 둘은 다른 축이므로 함께 실린다.
+    """
+    from gamdap.growth.postback import inject_click_token
+    from gamdap.members.affiliate import apply_affiliate
+
+    url = landing_url
+    click_param = None
+    if network_id:
+        row = conn.execute(
+            "SELECT n.tracking_param, cs.click_param FROM core.networks n "
+            "LEFT JOIN core.conversion_sources cs ON cs.network_id = n.id "
+            "WHERE n.id=%s", (network_id,)).fetchone()
+        if row:
+            if member_tracking:
+                url = apply_affiliate(url, row["tracking_param"], member_tracking) or url
+            click_param = row["click_param"] or "subid"
+    return inject_click_token(url, click_param or "subid", click_token) or url
 
 
 def record_conversion(conn: Connection, *, visitor_id: str, network_id: int | None,
@@ -131,7 +163,14 @@ def run_attribution(conn: Connection, *, model: str = DEFAULT_MODEL,
     """미귀속 전환을 찾아 방문자 경로에 기여를 배분한다.
 
     같은 (전환, 모델) 조합은 UNIQUE 제약으로 중복 적재되지 않는다(멱등).
+    model="auto" 면 표본이 충분해 활성화된 최선 모델을 자동 선택한다
+    (부족하면 시간감쇠로 안전하게 내려온다).
     """
+    channel_weights: dict[str, float] = {}
+    if model == "auto":
+        from gamdap.growth.model_gate import active_model
+        model, channel_weights = active_model(conn)
+
     convs = conn.execute(
         "SELECT c.id, c.occurred_at, c.visitor_id, COALESCE(c.commission_krw,0) AS krw "
         "FROM core.conversions c "
@@ -156,7 +195,8 @@ def run_attribution(conn: Connection, *, model: str = DEFAULT_MODEL,
         touches = [Touch(touchpoint_id=t["id"], partner_id=t["partner_id"],
                          occurred_at=t["occurred_at"], channel=t["channel"]) for t in tps]
         weights = attribute(touches, model=model, lookback_days=lookback_days,
-                            conversion_at=cv["occurred_at"])
+                            conversion_at=cv["occurred_at"],
+                            channel_weights=channel_weights or None)
         amounts = credit_amounts(weights, Decimal(str(cv["krw"] or 0)))
 
         for t, w, amt in zip(touches, weights, amounts, strict=True):
