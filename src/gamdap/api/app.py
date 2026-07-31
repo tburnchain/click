@@ -63,6 +63,13 @@ def create_app() -> FastAPI:
             # API 경로는 위 라우터가 처리; 여기 도달 = 매칭 실패 → 404
             if full_path.startswith(("api/", "openapi", "docs", "redoc", "health")):
                 raise HTTPException(404, "not found")
+            # 루트 정적파일(symbol.svg, robots.txt, sitemap.xml 등)은 실제 파일로 응답.
+            # 없으면 SPA 폴백 — 파비콘이 index.html 로 반환되던 문제 방지.
+            if full_path and "/" not in full_path and ".." not in full_path:
+                candidate = (_FRONTEND_DIST / full_path).resolve()
+                # dist 밖으로 벗어나는 경로는 거부(경로 탐색 차단)
+                if candidate.is_file() and candidate.is_relative_to(_FRONTEND_DIST.resolve()):
+                    return FileResponse(str(candidate))
             return FileResponse(str(index_file))
 
     return app
