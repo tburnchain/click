@@ -14,6 +14,7 @@ from gamdap.api.routers.admin_ai import router as admin_ai_router
 from gamdap.api.routers.admin_crawl import router as crawl_router
 from gamdap.api.routers.billing import router as billing_router
 from gamdap.api.routers.discovery import router as discovery_router
+from gamdap.api.routers.growth import router as growth_router
 from gamdap.api.routers.members import router as members_router
 from gamdap.api.routers.v1 import router as v1_router
 
@@ -50,6 +51,7 @@ def create_app() -> FastAPI:
     app.include_router(discovery_router)
     app.include_router(billing_router)
     app.include_router(members_router)
+    app.include_router(growth_router)
 
     # 빌드된 프런트가 있으면 정적 서빙 + SPA 폴백(/site/*, /explore 등 클라이언트 라우트)
     if _FRONTEND_DIST.is_dir():
