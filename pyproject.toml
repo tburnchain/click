@@ -17,6 +17,7 @@ dependencies = [
     "redis>=5.0",
     "python-dateutil>=2.9",
     "zstandard>=0.22",
+    "cryptography>=42.0",   # members.security Fernet(자격증명 암호화)
 ]
 
 [project.optional-dependencies]
