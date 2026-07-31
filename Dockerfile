@@ -31,6 +31,7 @@ COPY src ./src
 RUN pip install --no-cache-dir -e .
 
 COPY migrations ./migrations
+COPY scripts ./scripts
 COPY docker/entrypoint.sh /entrypoint.sh
 COPY --from=frontend /fe/dist ./frontend/dist
 RUN chmod +x /entrypoint.sh
