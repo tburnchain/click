@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "gamdap-demo",
+      "runtimeExecutable": ".venv/Scripts/python.exe",
+      "runtimeArgs": ["scripts/serve_demo.py"],
+      "port": 8020,
+      "autoPort": true
+    }
+  ]
+}

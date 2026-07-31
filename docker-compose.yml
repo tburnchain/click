@@ -1,0 +1,63 @@
+services:
+  db:
+    image: postgres:16
+    container_name: gamdap-db
+    environment:
+      POSTGRES_DB: ${GAMDAP_DB_NAME:-gamdap}
+      POSTGRES_USER: ${GAMDAP_DB_USER:-gamdap}
+      POSTGRES_PASSWORD: ${GAMDAP_DB_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - gamdap_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${GAMDAP_DB_USER:-gamdap} -d ${GAMDAP_DB_NAME:-gamdap}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: gamdap-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build: .
+    container_name: gamdap-app
+    command: ["serve"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      GAMDAP_DB_HOST: db
+      GAMDAP_REDIS_URL: redis://redis:6379/0
+      GAMDAP_RUN_MIGRATIONS: "true"
+    ports:
+      - "8000:8000"
+
+  worker:
+    build: .
+    container_name: gamdap-worker
+    command: ["worker"]
+    depends_on:
+      app:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      GAMDAP_DB_HOST: db
+      GAMDAP_REDIS_URL: redis://redis:6379/0
+      GAMDAP_RUN_MIGRATIONS: "false"
+
+volumes:
+  gamdap_pgdata:

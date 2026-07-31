@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# venv
+.venv/
+venv/
+
+# Node
+node_modules/
+frontend/node_modules/
+frontend/dist/
+*.log
+
+# 환경/비밀
+.env
+*.local
+
+# 로컬 DB 클러스터(절대 커밋 금지 — 데이터·설정 전체)
+.pgdata/
+*.pgdata/
+pglog.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 제휴 네트워크 API 키(로컬 전용, 절대 커밋 금지)
+.env.keys
+.env.affiliate
+affiliate_keys*.json
+*.xlsx
