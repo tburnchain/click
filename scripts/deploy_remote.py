@@ -16,6 +16,12 @@ import sys
 
 import paramiko
 
+# 원격 출력에 한글·기호(✓)가 섞이므로 콘솔 인코딩을 UTF-8 로 고정한다.
+# 윈도 기본 cp949 로는 UnicodeEncodeError 가 나서 배포가 중단된다.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+
 HOST = os.environ.get("GAMDAP_DEPLOY_HOST", "31.97.8.11")
 USER = os.environ.get("GAMDAP_DEPLOY_USER", "root")
 PASSWORD = os.environ.get("GAMDAP_DEPLOY_PASSWORD", "")
